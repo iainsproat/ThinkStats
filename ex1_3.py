@@ -41,7 +41,7 @@ def GetData():
     table.ReadRecords()
     return table.records
 
-def SumPregnancyLength(records, attrName):
+def Sum(records, attrName):
     sumPrgLengths = 0
     for record in records:
         sumPrgLengths += getattr(record, attrName)
@@ -49,29 +49,31 @@ def SumPregnancyLength(records, attrName):
 
 def Mean(records, attrName):
     numberRecords = len(records)
-    sumRecordAttributes = SumPregnancyLength(records, attrName)
-    meanRecordAttributes= timedelta(weeks = (sumRecordAttributes / numberRecords))
+    sumRecordAttributes = Sum(records, attrName)
+    meanRecordAttributes = float(sumRecordAttributes / numberRecords)
     return numberRecords, meanRecordAttributes
 
-def main(name):
+def Main(name):
     records = GetData()
     print ('Number of pregnancies', len(records))
 
     firstBorn, subsequentBorn = PartitionFirstBornFromSubsequentBorn(records)
     
-    numberFirstBorn, avgFirstBornPrgLength = Mean(firstBorn, 'prglength')
-    numberSubsequentBorn, avgSubsequentBornPrgLength = Mean(subsequentBorn, 'prglength')
+    numberFirstBorn, meanFirstBornPrgLength = Mean(firstBorn, 'prglength')
+    numberSubsequentBorn, meanSubsequentBornPrgLength = Mean(subsequentBorn, 'prglength')
     numberLiveBirths = numberFirstBorn + numberSubsequentBorn
-
-    diffFirstBornToSubsequentBornPrgLength = avgFirstBornPrgLength - avgSubsequentBornPrgLength
+    
+    meanFirstBornPrgLength= timedelta(weeks = meanFirstBornPrgLength)
+    meanSubsequentBornPrgLength = timedelta(weeks = meanSubsequentBornPrgLength)
+    diffFirstBornToSubsequentBornPrgLength = meanFirstBornPrgLength - meanSubsequentBornPrgLength
 
     print ('Number of live births:               ', numberLiveBirths)
     print ('Number of live first born:           ', numberFirstBorn)
     print ('Number of live second or later born: ', numberSubsequentBorn)
-    print ('Average pregnancy length of first born:           ', avgFirstBornPrgLength)
-    print ('Average pregnancy length of second or later born: ', avgSubsequentBornPrgLength)
+    print ('Average pregnancy length of first born:           ', meanFirstBornPrgLength)
+    print ('Average pregnancy length of second or later born: ', meanSubsequentBornPrgLength)
     print ('Difference in pregnancy length between first born and later born: ', diffFirstBornToSubsequentBornPrgLength)
 
 
 if __name__ == '__main__':
-    main(*sys.argv)
+    Main(*sys.argv)
