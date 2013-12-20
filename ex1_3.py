@@ -36,29 +36,32 @@ def PartitionFirstBornFromSubsequentBorn(records):
     CleanupMonkeyPatching()
     return firstBorn, subsequentBorn
 
-def SumPregnancyLength(records):
-    sumPrgLengths = 0
-    for record in records:
-        sumPrgLengths += record.prglength
-    return sumPrgLengths
-
-def main(name):
-
+def GetData():
     table = survey.Pregnancies()
     table.ReadRecords()
-    print ('Number of pregnancies', len(table.records))
+    return table.records
 
-    firstBorn, subsequentBorn = PartitionFirstBornFromSubsequentBorn(table.records)
+def SumPregnancyLength(records, attrName):
+    sumPrgLengths = 0
+    for record in records:
+        sumPrgLengths += getattr(record, attrName)
+    return sumPrgLengths
+
+def Mean(records, attrName):
+    numberRecords = len(records)
+    sumRecordAttributes = SumPregnancyLength(records, attrName)
+    meanRecordAttributes= timedelta(weeks = (sumRecordAttributes / numberRecords))
+    return numberRecords, meanRecordAttributes
+
+def main(name):
+    records = GetData()
+    print ('Number of pregnancies', len(records))
+
+    firstBorn, subsequentBorn = PartitionFirstBornFromSubsequentBorn(records)
     
-    numberFirstBorn = len(firstBorn)
-    numberSubsequentBorn = len(subsequentBorn)
+    numberFirstBorn, avgFirstBornPrgLength = Mean(firstBorn, 'prglength')
+    numberSubsequentBorn, avgSubsequentBornPrgLength = Mean(subsequentBorn, 'prglength')
     numberLiveBirths = numberFirstBorn + numberSubsequentBorn
-    
-    sumFirstBornPrgLength = SumPregnancyLength(firstBorn)
-    sumSubsequentBornPrgLength = SumPregnancyLength(subsequentBorn)
-
-    avgFirstBornPrgLength = timedelta(weeks = (sumFirstBornPrgLength / numberFirstBorn))
-    avgSubsequentBornPrgLength = timedelta(weeks = (sumSubsequentBornPrgLength / numberSubsequentBorn))
 
     diffFirstBornToSubsequentBornPrgLength = avgFirstBornPrgLength - avgSubsequentBornPrgLength
 
