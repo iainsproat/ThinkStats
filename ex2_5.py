@@ -1,4 +1,5 @@
-﻿import Pmf
+﻿import sys
+import Pmf
 
 def PmfMean(t):
     mean = 0
@@ -16,8 +17,12 @@ def PmfVariance(t, mean=None):
     
     return variance
 
-pmf = Pmf.MakePmfFromList([1, 2, 2, 3, 5])
-print ('PmfMean : ', PmfMean(pmf))
-print ('Mean : ', pmf.Mean())
-print ('PmfVariance : ', PmfVariance(pmf))
-print ('Variance : ', pmf.Var())
+def Main(name):
+    pmf = Pmf.MakePmfFromList([1, 2, 2, 3, 5])
+    print ('PmfMean : ', PmfMean(pmf))
+    print ('Mean : ', pmf.Mean())
+    print ('PmfVariance : ', PmfVariance(pmf))
+    print ('Variance : ', pmf.Var())
+    
+if __name__ == '__main__':
+    Main(*sys.argv)
