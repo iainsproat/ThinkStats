@@ -63,6 +63,8 @@
     <Compile Include="ex2_2.py" />
     <Compile Include="ex2_4.py" />
     <Compile Include="ex2_5.py" />
+    <Compile Include="ex2_6.py" />
+    <Compile Include="ex2_7.py" />
     <Compile Include="Pmf.py" />
     <Compile Include="survey.py" />
     <Compile Include="thinkstats.py" />
