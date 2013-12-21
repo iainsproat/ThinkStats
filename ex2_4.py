@@ -1,6 +1,7 @@
-﻿import Pmf
+﻿import sys
+import Pmf
 
-def RemainingLifetime(original, cutoff):
+def TruncatePmf(original, cutoff):
     new = original.Copy()
     for key in original.d.keys():
         if key < cutoff:
@@ -9,7 +10,10 @@ def RemainingLifetime(original, cutoff):
     return new
 
 
+def Main(name):
+    pmf = Pmf.MakePmfFromList([1, 2, 2, 3, 5])
+    new = TruncatePmf(pmf, 3);
+    print(new.Prob(5))
 
-pmf = Pmf.MakePmfFromList([1, 2, 2, 3, 5])
-new = RemainingLifetime(pmf, 3);
-print(new.Prob(5))
+if __name__ == '__main__':
+    Main(*sys.argv)
